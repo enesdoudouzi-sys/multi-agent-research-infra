@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: multi-agent-research
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/enesdoudouzi-sys/multi-agent-research-infra
+    targetRevision: main
+    path: overlays/prod
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: multi-agent-research
+
+  syncPolicy:
+    automated:
+      prune: true       # remove resources no longer in git
+      selfHeal: true    # revert manual kubectl changes
+    syncOptions:
+      - CreateNamespace=true
